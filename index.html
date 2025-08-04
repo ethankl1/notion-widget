@@ -5,8 +5,8 @@
   <title>Notion Page View Counter</title>
   <style>
     body {
-      background-color: black;
-      color: white;
+      background-color: white;
+      color: black;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,7 +16,8 @@
     }
 
     .counter-box {
-      background-color: #222;
+      background-color: black;
+      border: 1px solid gray;
       padding: 20px 40px;
       border-radius: 12px;
       font-size: 1.5rem;
@@ -24,6 +25,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      color: white;
     }
   </style>
 </head>
@@ -39,30 +41,4 @@
     const firebaseConfig = {
       apiKey: "AIzaSyBX7ovsPOqBdpcdEDBclcq9erZhIePE3dw",
       authDomain: "notion-counter-widget.firebaseapp.com",
-      databaseURL: "https://notion-counter-widget-default-rtdb.firebaseio.com",
-      projectId: "notion-counter-widget",
-      storageBucket: "notion-counter-widget.firebasestorage.app",
-      messagingSenderId: "852349010536",
-      appId: "1:852349010536:web:235cc77573f5da2440b1dd"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Reference to the counter
-    const dbRef = firebase.database().ref("pageViews/notion-widget");
-
-    const counterEl = document.getElementById("counter");
-
-    dbRef.transaction(current => (current || 0) + 1)
-      .then(result => {
-        const newCount = result.snapshot.val();
-        counterEl.innerText = `Page visited ${newCount} times`;
-      })
-      .catch(error => {
-        console.error(error);
-        counterEl.innerText = "Unable to load count.";
-      });
-  </script>
-</body>
-</html>
+      databaseURL: "https://notion-co

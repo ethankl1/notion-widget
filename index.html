@@ -29,22 +29,11 @@
     const namespace = "ethankl1";
     const key = "notion-widget";
 
-    fetch(`https://countapi.store/get/${namespace}/${key}`)
-      .then(res => {
-        if (res.status === 404) {
-          // If this is the first hit, initialize the counter
-          return fetch(`https://countapi.store/set/${namespace}/${key}?value=1`)
-            .then(() => ({ value: 1 }));
-        }
-        return res.json();
-      })
+    fetch(`https://countapi.store/update/${namespace}/${key}?amount=1`)
+      .then(res => res.json())
       .then(data => {
-        const count = (data.value || 0) + 1;
         document.getElementById("counter").innerText =
-          `Page visited ${count} times`;
-
-        // Increment the counter
-        return fetch(`https://countapi.store/update/${namespace}/${key}?amount=1`);
+          `Page visited ${data.value} times`;
       })
       .catch(() => {
         document.getElementById("counter").innerText =

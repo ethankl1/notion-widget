@@ -21,15 +21,19 @@
   <div id="counter">Loading...</div>
 
   <script>
-    const pageId = "notion-widget"; // Replace with your own unique string
-    fetch(`https://api.counterapi.dev/v1/${pageId}/hit`)
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('counter').innerText = `Page visited ${data.count} times`;
-      })
-      .catch(() => {
-        document.getElementById('counter').innerText = "Unable to load count.";
-      });
-  </script>
+  const namespace = "ethankl1";
+  const key = "notion-widget";
+
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("counter").innerText =
+        `Page visited ${data.value} times`;
+    })
+    .catch(() => {
+      document.getElementById("counter").innerText =
+        "Unable to load count.";
+    });
+</script>
 </body>
 </html>

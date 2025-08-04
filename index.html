@@ -2,38 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Notion Page Views</title>
+  <title>Notion Page View Counter</title>
   <style>
     body {
-      margin: 0;
       background-color: black;
       color: white;
-      font-family: sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100px;
-      width: 300px;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .counter-box {
+      background-color: #222;
+      padding: 20px 40px;
+      border-radius: 12px;
+      font-size: 1.5rem;
     }
   </style>
 </head>
 <body>
-  <div id="counter">Loading...</div>
+  <div class="counter-box" id="counter">Loading...</div>
 
   <script>
-  const namespace = "ethankl1";
-  const key = "notion-widget";
+    const namespace = "ethankl1";
+    const key = "notion-widget";
 
-  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("counter").innerText =
-        `Page visited ${data.value} times`;
-    })
-    .catch(() => {
-      document.getElementById("counter").innerText =
-        "Unable to load count.";
-    });
-</script>
+    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("counter").innerText =
+          `Page visited ${data.value} times`;
+      })
+      .catch(() => {
+        document.getElementById("counter").innerText =
+          "Unable to load count.";
+      });
+  </script>
 </body>
 </html>

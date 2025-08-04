@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Notion Page View Counter</title>
   <style>
     body {
@@ -29,11 +29,22 @@
     const namespace = "ethankl1";
     const key = "notion-widget";
 
-    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-      .then(res => res.json())
+    fetch(`https://countapi.store/get/${namespace}/${key}`)
+      .then(res => {
+        if (res.status === 404) {
+          // If this is the first hit, initialize the counter
+          return fetch(`https://countapi.store/set/${namespace}/${key}?value=1`)
+            .then(() => ({ value: 1 }));
+        }
+        return res.json();
+      })
       .then(data => {
+        const count = (data.value || 0) + 1;
         document.getElementById("counter").innerText =
-          `Page visited ${data.value} times`;
+          `Page visited ${count} times`;
+
+        // Increment the counter
+        return fetch(`https://countapi.store/update/${namespace}/${key}?amount=1`);
       })
       .catch(() => {
         document.getElementById("counter").innerText =

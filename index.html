@@ -2,38 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Notion Analytics Widget</title>
+  <title>Notion Page View Counter</title>
+
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
   <style>
     body {
       background-color: white;
       color: black;
-      font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      font-family: 'Inter', sans-serif;
     }
+
     .counter-box {
       background-color: black;
-      color: white;
-      padding: 10px 16px;
+      border: 2px solid gray;
+      padding: 6px 14px;
       border-radius: 10px;
-      border: 2px solid grey;
-      font-size: 12px;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .counter-box strong {
+      font-weight: bold;
     }
   </style>
-  <!-- Inter font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
 </head>
 <body>
   <div class="counter-box" id="counter">Loading...</div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
   <script>
-    // Firebase config (yours)
     const firebaseConfig = {
       apiKey: "AIzaSyBX7ovsPOqBdpcdEDBclcq9erZhIePE3dw",
       authDomain: "notion-counter-widget.firebaseapp.com",
@@ -45,26 +57,20 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
 
-    // Get today's date string: "2025-08-04"
-    const today = new Date().toISOString().split("T")[0];
+    const dbRef = firebase.database().ref("pageViews/notion-widget");
 
     const counterEl = document.getElementById("counter");
 
-    const dailyRef = db.ref("views/" + today);
-
-    // Increment today's count by 1
-    dailyRef.get().then(snapshot => {
-      let count = snapshot.exists() ? snapshot.val() : 0;
-      count += 1;
-      return dailyRef.set(count).then(() => {
-        counterEl.innerHTML = `Page visited <strong>${count}</strong> times`;
+    dbRef.transaction(current => (current || 0) + 1)
+      .then(result => {
+        const newCount = result.snapshot.val();
+        counterEl.innerHTML = `Page visited&nbsp;<strong>${newCount}</strong>&nbsp;times`;
+      })
+      .catch(error => {
+        console.error(error);
+        counterEl.innerText = "Unable to load count.";
       });
-    }).catch((error) => {
-      console.error(error);
-      counterEl.innerText = "Unable to load count.";
-    });
   </script>
 </body>
 </html>

@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Notion Page View Counter</title>
+
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+
   <style>
     body {
       background-color: white;
@@ -12,13 +16,13 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     .counter-box {
       background-color: black;
       border: 2px solid gray;
-      padding: 10px 20px; /* smaller horizontal padding */
+      padding: 10px 20px;
       border-radius: 12px;
       font-size: 1rem;
       display: flex;
@@ -28,44 +32,11 @@
       color: white;
       white-space: nowrap;
     }
+
+    .counter-box strong {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="counter-box" id="counter">Loading...</div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-  <script>
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBX7ovsPOqBdpcdEDBclcq9erZhIePE3dw",
-      authDomain: "notion-counter-widget.firebaseapp.com",
-      databaseURL: "https://notion-counter-widget-default-rtdb.firebaseio.com",
-      projectId: "notion-counter-widget",
-      storageBucket: "notion-counter-widget.firebasestorage.app",
-      messagingSenderId: "852349010536",
-      appId: "1:852349010536:web:235cc77573f5da2440b1dd"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    // Reference to the counter
-    const dbRef = firebase.database().ref("pageViews/notion-widget");
-
-    const counterEl = document.getElementById("counter");
-
-    dbRef.transaction(current => (current || 0) + 1)
-      .then(result => {
-        const newCount = result.snapshot.val();
-        counterEl.innerText = `Page visited ${newCount} times`;
-      })
-      .catch(error => {
-        console.error(error);
-        counterEl.innerText = "Unable to load count.";
-      });
-  </script>
-</body>
-</html>
+  <div class="counter-box" id="counter">Loadin

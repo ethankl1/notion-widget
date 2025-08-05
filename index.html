@@ -39,4 +39,41 @@
   </style>
 </head>
 <body>
-  <div class="counter-box" id="counter">Loadin
+  <div class="counter-box" id="counter">Loading...</div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBX7ovsPOqBdpcdEDBclcq9erZhIePE3dw",
+      authDomain: "notion-counter-widget.firebaseapp.com",
+      databaseURL: "https://notion-counter-widget-default-rtdb.firebaseio.com",
+      projectId: "notion-counter-widget",
+      storageBucket: "notion-counter-widget.firebasestorage.app",
+      messagingSenderId: "852349010536",
+      appId: "1:852349010536:web:235cc77573f5da2440b1dd"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Reference to the counter
+    const dbRef = firebase.database().ref("pageViews/notion-widget");
+
+    const counterEl = document.getElementById("counter");
+
+    dbRef.transaction(current => (current || 0) + 1)
+      .then(result => {
+        const newCount = result.snapshot.val();
+        counterEl.innerHTML = `Page visited <strong>${newCount}</strong> times`;
+      })
+      .catch(error => {
+        console.error(error);
+        counterEl.innerText = "Unable to load count.";
+      });
+  </script>
+</body>
+</html>

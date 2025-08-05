@@ -68,7 +68,7 @@
     dbRef.transaction(current => (current || 0) + 1)
       .then(result => {
         const newCount = result.snapshot.val();
-        counterEl.innerHTML = `Page visited <strong>${newCount}</strong> times`;
+        counterEl.innerHTML = `Page visited&nbsp;<strong>${newCount}</strong>&nbsp;times`;
       })
       .catch(error => {
         console.error(error);

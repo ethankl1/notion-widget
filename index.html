@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Notion Page View Counter</title>
-
-  <!-- Google Font: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-
   <style>
     body {
       background-color: white;
@@ -18,22 +14,15 @@
       margin: 0;
       font-family: 'Inter', sans-serif;
     }
-
     .counter-box {
       background-color: black;
-      border: 2px solid gray;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
       color: white;
-      white-space: nowrap;
+      padding: 10px 20px;
+      border: 2px solid gray;
+      border-radius: 12px;
+      font-size: 0.9rem;
     }
-
-    .counter-box strong {
+    .counter-number {
       font-weight: bold;
     }
   </style>
@@ -41,11 +30,12 @@
 <body>
   <div class="counter-box" id="counter">Loading...</div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Firebase config (replace with your real config)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBX7ovsPOqBdpcdEDBclcq9erZhIePE3dw",
       authDomain: "notion-counter-widget.firebaseapp.com",
@@ -56,21 +46,20 @@
       appId: "1:852349010536:web:235cc77573f5da2440b1dd"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const counterRef = ref(database, 'counter');
 
-    const dbRef = firebase.database().ref("pageViews/notion-widget");
-
-    const counterEl = document.getElementById("counter");
-
-    dbRef.transaction(current => (current || 0) + 1)
-      .then(result => {
-        const newCount = result.snapshot.val();
-        counterEl.innerHTML = `Page visited&nbsp;<strong>${newCount}</strong>&nbsp;times`;
-      })
-      .catch(error => {
-        console.error(error);
-        counterEl.innerText = "Unable to load count.";
-      });
+    // Atomically increment the count
+    runTransaction(counterRef, (current) => {
+      return (current || 0) + 1;
+    }).then(result => {
+      const newCount = result.snapshot.val();
+      document.getElementById("counter").innerHTML = `Page visited <span class="counter-number">${newCount}</span> times`;
+    }).catch((error) => {
+      console.error(error);
+      document.getElementById("counter").innerText = "Unable to load count.";
+    });
   </script>
 </body>
 </html>
